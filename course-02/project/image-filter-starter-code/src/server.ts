@@ -31,7 +31,7 @@ function sleep(ms) {
         
       const filtered_image_path = await filterImageFromURL(image_url.toString());
     
-      res.sendFile(filtered_image_path)
+      res.status(200).sendFile(filtered_image_path)
 
       var images_to_delete_array = [];
       images_to_delete_array.push(filtered_image_path);
