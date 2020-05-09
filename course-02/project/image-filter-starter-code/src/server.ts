@@ -2,7 +2,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import {filterImageFromURL, deleteLocalFiles} from './util/util';
 
-function sleep(ms) {
+function sleep(ms: number) {
   return new Promise((resolve) => {
     setTimeout(resolve, ms);
   });
@@ -20,20 +20,20 @@ function sleep(ms) {
   app.use(bodyParser.json());
 
 
-  app.get( "/filteredimage/", async ( req, res ) => {
+  app.get( "/filteredimage/", async (req: express.Request, res: express.Response  ) => {
     
-    const image_url  = req.query.image_url;
-    const isImageUrl = require('is-image-url');
+    const image_url: string  = req.query.image_url as string;
+    const isImageUrl: NodeRequire = require('is-image-url');
     
 
    
     if (isImageUrl(image_url)){
         
-      const filtered_image_path = await filterImageFromURL(image_url.toString());
+      const filtered_image_path: string = await filterImageFromURL(image_url);
     
       res.status(200).sendFile(filtered_image_path)
 
-      var images_to_delete_array = [];
+      var images_to_delete_array: Array<string> = [];
       images_to_delete_array.push(filtered_image_path);
       await sleep(5000);      
       deleteLocalFiles(images_to_delete_array);
@@ -43,23 +43,6 @@ function sleep(ms) {
     }
 
   } );
-  // @TODO1 IMPLEMENT A RESTFUL ENDPOINT
-  // GET /filteredimage?image_url={{URL}}
-  // endpoint to filter an image from a public url.
-  // IT SHOULD
-  //    1
-  //    1. validate the image_url query
-  //    2. call filterImageFromURL(image_url) to filter the image
-  //    3. send the resulting file in the response
-  //    4. deletes any files on the server on finish of the response
-  // QUERY PARAMATERS
-  //    image_url: URL of a publicly accessible image
-  // RETURNS
-  //   the filtered image file [!!TIP res.sendFile(filteredpath); might be useful]
-
-  /**************************************************************************** */
-
-  //! END @TODO1
   
   // Root Endpoint
   // Displays a simple message to the user
